@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forex Factory - Quick Trade Planner</title>
+  <style>
+    :root{--bg:#0a0f15;--card:#141a22;--text:#e9f0f6;--accent:#8be2ff}
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;font-family:Arial,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:860px;margin:0 auto;padding:20px}
+    .card{background:var(--card);border-radius:12px;padding:14px;margin:12px 0}
+    input, textarea{width:100%;padding:8px;border-radius:6px;border:1px solid #345}
+    button{padding:8px 12px;border-radius:6px;border:0;background:var(--accent);cursor:pointer}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 700px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Forex Factory - Quick Trade Planner</h1>
+    <div class="card">
+      <div class="grid">
+        <div class="field">
+          <label>Trade pair</label>
+          <input id="pair" value="EUR/USD" />
+        </div>
+        <div class="field">
+          <label>Target price</label>
+          <input id="target" value="1.1000" />
+        </div>
+        <div class="field">
+          <label>Stop loss</label>
+          <input id="stop" value="1.0900" />
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <input id="notes" value="" placeholder="entry criteria" />
+        </div>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end">
+        <button id="save">Save</button>
+        <button id="clear">Clear</button>
+      </div>
+    </div>
+    <div class="card" id="log" aria-live="polite" style="min-height:60px"></div>
+  </div>
+  <script>
+    (function(){
+      const log=document.getElementById('log');
+      const save=document.getElementById('save');
+      const clear=document.getElementById('clear');
+      const data=[];
+      function render(){ log.innerHTML = data.map((d,i)=>`<div>${i+1}. ${d.pair} @ ${d.target} (SL ${d.stop}) - ${d.notes||''}</div>`).join('') || '<em>No trades yet.</em>'; }
+      save.addEventListener('click', ()=>{
+        const d={
+          pair: document.getElementById('pair').value,
+          target: document.getElementById('target').value,
+          stop: document.getElementById('stop').value,
+          notes: document.getElementById('notes').value
+        };
+        data.push(d); render();
+      });
+      clear.addEventListener('click', ()=>{data.length=0; render();});
+    })();
+  </script>
+</body>
+</html>
